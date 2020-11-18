@@ -28,6 +28,11 @@ const App = () => {
     }
   }, [])
 
+  const emptyUser = () => {
+    window.localStorage.clear()
+    setUser(null)
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
     console.log('logging in with', username, password)
@@ -93,7 +98,7 @@ const App = () => {
       <h2>blogs</h2>
 
       <br></br>
-      <p>Logged in as {username} {userToken}</p> 
+      <p>Logged in as {username} </p> <button onClick={() => emptyUser()}>Log out</button>
       <br></br>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
