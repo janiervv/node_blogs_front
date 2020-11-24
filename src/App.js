@@ -8,15 +8,24 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
-  const [errorMessage, setErrorMessage] = useState(null)
   const [user, setUser] = useState(null)
-  const [userToken, setUserToken] = useState(null)
+  const [userId, setUserId] = useState(null)
+
+  const [notification, setNotification] = useState("")
+  const [errorNotification, setErrorNotification] = useState("")
+
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    ) 
+    
   }, [])
+
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -33,6 +42,44 @@ const App = () => {
     setUser(null)
   }
 
+
+
+  const handlePost = (event) => {
+    event.preventDefault()
+
+     fetch('/api/users') //first get userId of the user who has logged in
+      .then((response) => response.json())
+      .then((responseData) => {
+        const blogUser = ((responseData.find(n => n.name === username))) //find user who has same name than user who is logged in
+        setUserId(blogUser.id)
+        const newBlog = {title: title, author: author, url: url, userId: userId}
+        blogService.create(newBlog)
+        .then(response => {
+          console.log(response)
+          setBlogs(blogs.concat(response))
+        })
+        setTitle("")
+        setAuthor("")
+        setUrl("")
+
+        setNotification("Blog " + title + " was added! Author: " + author)
+        setTimeout(() => {
+          setNotification("")
+        }, 4000)
+
+
+      })
+
+      .catch((err) => {
+        console.error(err);
+        setErrorNotification("User not found")
+        setTimeout(() => {
+          setNotification("")
+        }, 4000)
+      });
+    }
+
+
   const handleLogin = async (event) => {
     event.preventDefault()
     console.log('logging in with', username, password)
@@ -47,15 +94,16 @@ const App = () => {
       ) 
       setUser(user)
       setUsername(user.name)
-      setUserToken(user.token)
       setPassword('')
     } catch (exception) {
-      setErrorMessage('wrong credentials')
+      setNotification('Wrong credentials')
       setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+        setNotification("")
+      }, 4000)
     }
   }
+
+
 
   if (user === null) {
     return (
@@ -63,7 +111,9 @@ const App = () => {
         
         <h2>Log in to application</h2>
 
-          <div class="login">
+        <p style={{backgroundColor:"red", width:"400px", color:"white"}}>{notification}</p>
+
+          <div className="login">
 
               <form onSubmit={handleLogin}>
                 <div>
@@ -100,14 +150,40 @@ const App = () => {
       <br></br>
       <p>Logged in as {username} </p> <button onClick={() => emptyUser()}>Log out</button>
       <br></br>
+      <p style={{backgroundColor:"green", width:"400px", color:"white"}}>{notification}</p>
+      <p style={{backgroundColor:"red", width:"400px", color:"white"}}>{errorNotification}</p>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
 
-
       <div>
         <br></br>
         <b>New blog</b>
+        <br></br>
+        <form onSubmit={handlePost}>
+          Title: <input
+            type="text"
+            value={title}
+            name="Title"
+            onChange={({ target }) => setTitle(target.value)}
+          ></input>
+          <br></br>
+          Author: <input
+            type="text"
+            value={author}
+            name="Author"
+            onChange={({ target }) => setAuthor(target.value)}
+          ></input>
+          <br></br>
+          URL: <input
+            type="text"
+            value={url}
+            name="Url"
+            onChange={({ target }) => setUrl(target.value)}
+          ></input>
+          <br></br>
+          <button type="submit">Save blog</button>
+        </form>
       </div>
     </div>
   )
