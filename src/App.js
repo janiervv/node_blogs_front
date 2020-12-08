@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import NewBlog from './components/Newblog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Togglable from './services/togglable'
 
 
 const App = () => {
@@ -156,35 +158,17 @@ const App = () => {
         <Blog key={blog.id} blog={blog} />
       )}
 
-      <div>
-        <br></br>
-        <b>New blog</b>
-        <br></br>
-        <form onSubmit={handlePost}>
-          Title: <input
-            type="text"
-            value={title}
-            name="Title"
-            onChange={({ target }) => setTitle(target.value)}
-          ></input>
-          <br></br>
-          Author: <input
-            type="text"
-            value={author}
-            name="Author"
-            onChange={({ target }) => setAuthor(target.value)}
-          ></input>
-          <br></br>
-          URL: <input
-            type="text"
-            value={url}
-            name="Url"
-            onChange={({ target }) => setUrl(target.value)}
-          ></input>
-          <br></br>
-          <button type="submit">Save blog</button>
-        </form>
-      </div>
+    <Togglable buttonLabel='New blog'>
+      <NewBlog
+            handlePost={handlePost}
+            title={title}
+            setTitle={setTitle}
+            author={author}
+            setAuthor={setAuthor}
+            url={url}
+            setUrl={setUrl}
+          />
+        </Togglable>
     </div>
   )
 }
