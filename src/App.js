@@ -25,7 +25,6 @@ const App = () => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     ) 
-    
   }, [])
 
 
@@ -80,6 +79,9 @@ const App = () => {
         }, 4000)
       });
     }
+
+
+    
 
 
   const handleLogin = async (event) => {

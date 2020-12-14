@@ -22,4 +22,14 @@ const create = async newObject => {
   return response.data
 }
 
-export default { getAll, create, setToken }
+const addLike = async modifiedObject => {
+  console.log("tulee addLikeen" + modifiedObject.url)
+  const config = {
+    headers: { Authorization: token },
+  }
+
+  const response = await axios.put(baseUrl + "/" + modifiedObject.id, modifiedObject, config)
+  return response.data
+}
+
+export default { getAll, create, setToken, addLike }
