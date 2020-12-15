@@ -32,7 +32,6 @@ const create = async newObject => {
 }
 
 const addLike = async modifiedObject => {
-  console.log("tulee addLikeen" + modifiedObject.url)
   const config = {
     headers: { Authorization: token },
   }

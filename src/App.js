@@ -56,7 +56,6 @@ const App = () => {
         const newBlog = {title: title, author: author, url: url, userId: userId}
         blogService.create(newBlog)
         .then(response => {
-          console.log(response)
           setBlogs(blogs.concat(response))
         })
         setTitle("")
@@ -157,7 +156,7 @@ const App = () => {
       <p style={{backgroundColor:"green", width:"400px", color:"white"}}>{notification}</p>
       <p style={{backgroundColor:"red", width:"400px", color:"white"}}>{errorNotification}</p>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} setBlogs={setBlogs} />
+        <Blog key={blog.id} blog={blog} setBlogs={setBlogs} blogs={blogs} />
       )}
 
     <Togglable buttonLabel='New blog'>

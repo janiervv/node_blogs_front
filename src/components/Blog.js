@@ -7,9 +7,7 @@ const Blog = ({ blog, setBlogs, blogs }) => {
   const [moreInfo, setMoreInfo] = useState(false)
 
 
-  const handleLike = (id, user, author, title, url, likes) => {
-
-     console.log("Please like " + id, user, author, title, url, likes)
+  const handleLike = async (id, user, author, title, url, likes) => {
 
      const updatedBlog = 
       {
@@ -21,25 +19,19 @@ const Blog = ({ blog, setBlogs, blogs }) => {
         id: id
       }
 
-     blogService.addLike(updatedBlog)
-     .then(blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    ) 
-
-     )
-     .catch((err) => {
-      console.error(err);
-    });
+    await blogService.addLike(updatedBlog)
+    const updated_blogs = await blogService.getAll()
+    setBlogs( updated_blogs.sort((a, b) => b.likes - a.likes))
+    
     }
 
-    const handleDelete = (id) => {
+
+    const handleDelete = (id, title) => {
+      if (window.confirm(`Delete ${title}?`)) {
       blogService.deleteItem(id)
-      .then(blogService.getAll().then(blogs =>
-        setBlogs( blogs )
-      )
-      )
+      .then(setBlogs( blogs.filter((a) => a.id !== id )))
+      }
     }
-
 
 
   if (moreInfo === false) {
@@ -58,7 +50,7 @@ const Blog = ({ blog, setBlogs, blogs }) => {
         <br></br> <b style={{backgroundColor:"#f5fdf5", width:"200", fontSize:20}}>URL: {blog.url}, LIKES: {blog.likes}</b> 
         <button onClick={() => handleLike(blog.id, blog.user.id, blog.author, blog.title, blog.url, blog.likes) } >Like</button> 
         <br></br>
-        <button onClick={() => handleDelete(blog.id) } >Delete</button> 
+        <button onClick={() => handleDelete(blog.id, blog.title) } >Delete</button> 
       </div>
     )
   }
