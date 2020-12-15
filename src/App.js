@@ -157,7 +157,7 @@ const App = () => {
       <p style={{backgroundColor:"green", width:"400px", color:"white"}}>{notification}</p>
       <p style={{backgroundColor:"red", width:"400px", color:"white"}}>{errorNotification}</p>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} setBlogs={setBlogs} />
       )}
 
     <Togglable buttonLabel='New blog'>

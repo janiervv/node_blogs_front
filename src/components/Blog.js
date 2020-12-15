@@ -1,7 +1,8 @@
 import React, {useState} from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+
+const Blog = ({ blog, setBlogs }) => {
   
   const [moreInfo, setMoreInfo] = useState(false)
 
@@ -21,9 +22,11 @@ const Blog = ({ blog }) => {
       }
 
      blogService.addLike(updatedBlog)
-     .then(response => {
-       console.log(response)
-     })
+     .then(blogService.getAll().then(blogs =>
+      setBlogs( blogs )
+    ) 
+
+     )
      .catch((err) => {
       console.error(err);
     });
