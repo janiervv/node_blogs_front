@@ -17,7 +17,7 @@ const deleteItem = async (id) => {
   const config = {
     headers: { Authorization: token },
   }
-  const request = await axios.delete(baseUrl + "/" + id, config)
+  const request = await axios.delete(baseUrl + '/' + id, config)
   return request.data
 }
 
@@ -36,7 +36,7 @@ const addLike = async modifiedObject => {
     headers: { Authorization: token },
   }
 
-  const response = await axios.put(baseUrl + "/" + modifiedObject.id, modifiedObject, config)
+  const response = await axios.put(baseUrl + '/' + modifiedObject.id, modifiedObject, config)
   return response.data
 }
 
