@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import blogService from '../services/blogs'
 
 
-const Blog = ({ blog, setBlogs }) => {
+const Blog = ({ blog, setBlogs, blogs }) => {
   
   const [moreInfo, setMoreInfo] = useState(false)
 
@@ -32,6 +32,16 @@ const Blog = ({ blog, setBlogs }) => {
     });
     }
 
+    const handleDelete = (id) => {
+      blogService.deleteItem(id)
+      .then(blogService.getAll().then(blogs =>
+        setBlogs( blogs )
+      )
+      )
+    }
+
+
+
   if (moreInfo === false) {
     return(
       <div>
@@ -43,9 +53,12 @@ const Blog = ({ blog, setBlogs }) => {
   else {
     return(
       <div>
-        {blog.title}, by {blog.author} <br></br> <b style={{backgroundColor:"#f5fdf5", width:"200", fontSize:20}}>URL: {blog.url}, LIKES: {blog.likes}</b> 
-        <button onClick={() => setMoreInfo(!moreInfo)}>Hide</button>
+        {blog.title}, by {blog.author} 
+        <button onClick={() => setMoreInfo(!moreInfo)}>Hide</button> 
+        <br></br> <b style={{backgroundColor:"#f5fdf5", width:"200", fontSize:20}}>URL: {blog.url}, LIKES: {blog.likes}</b> 
         <button onClick={() => handleLike(blog.id, blog.user.id, blog.author, blog.title, blog.url, blog.likes) } >Like</button> 
+        <br></br>
+        <button onClick={() => handleDelete(blog.id) } >Delete</button> 
       </div>
     )
   }
