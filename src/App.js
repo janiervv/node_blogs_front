@@ -4,6 +4,7 @@ import NewBlog from './components/Newblog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Togglable from './services/togglable'
+import PropTypes from 'prop-types'
 
 
 const App = () => {
@@ -106,6 +107,15 @@ const App = () => {
     }
   }
 
+  NewBlog.propTypes = {
+    handlePost: PropTypes.func.isRequired,
+    setTitle: PropTypes.func.isRequired,
+    setAuthor: PropTypes.func.isRequired,
+    setUrl: PropTypes.func.isRequired,
+    author: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired
+  }
 
 
   if (user === null) {
@@ -166,6 +176,8 @@ const App = () => {
           setUrl={setUrl}
         />
       </Togglable>
+
+      
     </div>
   )
 }
